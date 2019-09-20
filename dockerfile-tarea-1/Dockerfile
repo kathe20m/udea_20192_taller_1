@@ -4,9 +4,13 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
 COPY . /usr/src/app
 
-RUN npm install \
-&& cache clean --force \
+RUN apk add --update tini \
+&& npm install \
+&& npm cache clean --force
 
 EXPOSE 3000
 
-CMD ["/sbin/tini","--" ,"node", "./bin/www"]
+ENTRYPOINT ["/sbin/tini", "--"]
+
+CMD ["node", "./bin/www"]
+
